@@ -16,6 +16,7 @@ const PRECACHE = [
   'css/style.css',
   'js/app.js',
   'js/data.js',
+  'js/help.js',
   'js/render.js',
   'js/session.js',
   'js/srs.js',
@@ -25,6 +26,7 @@ const PRECACHE = [
   'icons/icon-192.png',
   'icons/icon-512.png',
   'icons/apple-touch-icon.png',
+  'data/TEMPLATE.csv',
 ];
 
 self.addEventListener('install', (event) => {

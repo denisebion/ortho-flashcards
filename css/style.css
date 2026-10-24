@@ -81,6 +81,14 @@ select { font: inherit; padding: 8px 10px; border-radius: 10px; border: 2px soli
 .tools summary { cursor: pointer; font-weight: 600; color: var(--muted); min-height: 32px; }
 .tool-buttons { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
 .tool-buttons .secondary { min-height: 46px; font-size: 0.95rem; padding: 6px 14px; }
+.steps { padding-left: 1.2em; margin: 8px 0; }
+.steps > li { margin-bottom: 14px; }
+.steps ul { margin: 6px 0 0; padding-left: 1.1em; }
+.steps ul li { margin-bottom: 6px; }
+code { font: 0.85em ui-monospace, SFMono-Regular, Menlo, monospace; background: #ece9e1; padding: 1px 5px; border-radius: 5px; overflow-wrap: anywhere; }
+.link-btn { display: inline-block; margin: 4px 6px 4px 0; padding: 8px 14px; background: var(--primary); color: #fff; border-radius: 10px; font-weight: 600; text-decoration: none; }
+.tools a { color: var(--primary); }
+.tools a.link-btn { color: #fff; }
 .secondary.danger { color: var(--again); border-color: var(--again); }
 
 .warning { margin: 0; padding: 10px var(--pad); background: #fbe9e7; color: var(--again); font-size: 0.9rem; text-align: center; }

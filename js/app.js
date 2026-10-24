@@ -7,6 +7,7 @@ import { Session, GRADES, planSession } from './session.js';
 import { ProgressStore } from './store.js';
 import { schedule, nextInterval, formatInterval, todayStr, addDays } from './srs.js';
 import { h, tint, cardText, loggedLine, shortDate } from './render.js';
+import { repoFromLocation, repoLinks } from './help.js';
 
 const GRADE_LABELS = { again: 'Again', hard: 'Hard', good: 'Good', easy: 'Easy' };
 const FALLBACK_TOPIC = { label: 'Unsorted', color: '#888888' };
@@ -78,7 +79,8 @@ function renderHome() {
   );
 
   const reviewed = cards.filter((c) => store.record(c.id)).length;
-  $('total').textContent = `${cards.length} cards · ${reviewed} reviewed`;
+  $('total').textContent = `${cards.length} cards · ${reviewed} reviewed`
+    + (state.data.generated ? ` · cards updated ${shortDate(state.data.generated)}` : '');
   $('shuffle').checked = state.shuffle;
   $('new-limit').value = String(state.newLimit);
 
@@ -194,6 +196,50 @@ function renderDone() {
 // Full sentence with answers filled in, as plain text
 const plainText = (card) => card.parts.map((p) => (p.t === 'text' ? p.v : p.a)).join('');
 
+// ------------------------------------------------------------------ "Add more cards" guide
+
+// How to add cards: upload a CSV to the repo's data/ folder on github.com; the GitHub
+// Action in .github/workflows rebuilds cards.json and republishes the app.
+function renderAddCards() {
+  const code = (text) => h('code', null, text);
+  const tags = state.data.topics.flatMap((t) => t.tags || []);
+  const repo = repoFromLocation(location.hostname, location.pathname);
+  const links = repo && repoLinks(repo);
+  const ext = (href, text, cls) => h('a', { href, target: '_blank', rel: 'noopener', class: cls }, text);
+
+  $('add-cards-body').replaceChildren(
+    h('p', { class: 'muted' },
+      'New cards are added by uploading a CSV file to GitHub. The app then rebuilds itself in a minute or two. Your study progress is kept.'),
+    h('ol', { class: 'steps' },
+      h('li', null,
+        h('strong', null, 'Make a CSV file. '),
+        'Start from the ', h('a', { href: 'data/TEMPLATE.csv', download: 'TEMPLATE.csv' }, 'template'),
+        ' (no header row, three columns, saved as UTF-8):',
+        h('ul', null,
+          h('li', null, h('b', null, 'Card text'), ' with the answer in a cloze: ', code('Walch B2 glenoid = {{c1::biconcave}} erosion')),
+          h('li', null, h('b', null, 'Extra'), ': ', code('💡 your tip<br><small>Logged 9/6</small>'),
+            ' (missed more than once? ', code('Logged 9/6, 9/21'), ')'),
+          h('li', null, h('b', null, 'Tag'), ': one of ', tags.flatMap((t) => [code(t), ' ']),
+            'or leave it empty and name the file after the topic, like ', code('spine_extra.csv'), '.'))),
+      h('li', null,
+        h('strong', null, 'Upload it to GitHub. '),
+        links
+          ? [ext(links.upload, 'Open the upload page', 'link-btn'),
+             ' Sign in if asked, drag your CSV in, then press ', h('b', null, 'Commit changes'), '.']
+          : 'On github.com open this app\'s repository, go to the data folder, choose Add file → Upload files, drag your CSV in and press Commit changes.',
+        ' Any file name ending in .csv works. Cards you already have are merged, not duplicated.'),
+      h('li', null,
+        h('strong', null, 'Wait a minute or two, '),
+        'then close and reopen this app while online. The line at the top of this screen shows when the cards were last updated, and new cards show up in the "new" count.'),
+      h('li', null,
+        h('strong', null, 'Something missing? '),
+        links
+          ? ['Open the latest run on the ', ext(links.actions, 'Actions page'), ' and read its summary.']
+          : 'Open the latest run under the repository\'s Actions tab and read its summary.',
+        ' It lists any skipped rows and tags that weren\'t recognised.')),
+  );
+}
+
 // ------------------------------------------------------------------ backup / import / reset
 
 function toolsMessage(text) {
@@ -267,6 +313,7 @@ async function init() {
   const known = new Set(state.data.topics.map((t) => t.id));
   for (const id of store.settings.selected || []) if (known.has(id)) state.selected.add(id);
 
+  renderAddCards();
   $('shuffle').addEventListener('change', (e) => { state.shuffle = e.target.checked; saveSettings(); });
   $('new-limit').addEventListener('change', (e) => { state.newLimit = Number(e.target.value); saveSettings(); renderHome(); });
   $('start').addEventListener('click', () => startSession(currentPlan(state.shuffle).queue));

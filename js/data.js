@@ -15,5 +15,5 @@ export async function loadData() {
   if (cards.some((c) => c.topic === config.unsorted.id)) topics.push(config.unsorted);
 
   const topicById = Object.fromEntries(topics.map((t) => [t.id, t]));
-  return { topics, topicById, cards };
+  return { topics, topicById, cards, generated: data.generated };
 }

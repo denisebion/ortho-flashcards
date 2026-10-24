@@ -1,0 +1,64 @@
+# Rebuilds cards.json from the CSVs in data/ and publishes the app to GitHub Pages.
+#
+# Runs on every push to main, so adding a CSV to data/ (even by uploading it on
+# github.com) updates the live app in a minute or two. The import summary (new cards,
+# merged duplicates, skipped rows, unsorted tags) shows on the run's summary page
+# under the Actions tab. You can also run it by hand from there ("Run workflow").
+#
+# One-time setup: repo Settings > Pages > Source: "GitHub Actions".
+
+name: Build and deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Import cards from data/*.csv
+        run: |
+          python3 tools/import_cards.py | tee import-output.txt
+          {
+            echo '## Card import'
+            echo '```'
+            cat import-output.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      # Publish only what the app needs. The CSVs stay out of the site, except the template
+      # that the in-app "Add more cards" guide links to.
+      - name: Assemble site
+        run: |
+          mkdir -p _site/data
+          cp -r index.html manifest.webmanifest sw.js css js icons topics.json cards.json _site/
+          cp data/TEMPLATE.csv _site/data/
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

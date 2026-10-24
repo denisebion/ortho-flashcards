@@ -40,7 +40,15 @@ each phase.
 - `manifest.webmanifest` + `icons/` (made by `python3 tools/make_icons.py`): installable PWA. All paths in
   the app are relative so it also works from a GitHub Pages subpath (user.github.io/repo/).
 - Keyboard: Space/Enter flip, 1-4 rate, Esc exit session, Enter on home = Start / on end screen = home.
-- Status: Phases 1-5 done. Next: Phase 6 (deploy to GitHub Pages + README).
+- `js/help.js`: builds GitHub links for the in-app "Add more cards" guide from the page address
+  (`<user>.github.io/<repo>/`); null when run locally (the guide then shows generic wording).
+- `.github/workflows/deploy.yml`: on push to main, runs `tools/import_cards.py`, publishes
+  index.html, manifest, sw.js, css/, js/, icons/, topics.json, cards.json and `data/TEMPLATE.csv` only
+  (CSVs stay out of the site) to GitHub Pages (Source must be "GitHub Actions"). Import summary goes to
+  the run's summary page. This is how cards get added without a computer: upload a CSV into `data/` on github.com.
+  `cards.json` stays committed (local dev needs it) but CI regenerates it, so a web upload doesn't commit it.
+- Status: Phases 1-6 done in the repo; the user still has to create the GitHub repo, push, and set
+  Pages source to GitHub Actions (README "Deploy" section). Not pushed anywhere yet. v2 features only if asked.
 - Testing a service worker in the preview browser: unregister it and delete caches afterwards
   (`navigator.serviceWorker.getRegistrations()`, `caches.keys()`) so it doesn't confuse later checks.
 - Browser storage is per origin and per install: the iPhone home-screen app and Safari tabs do NOT share
