@@ -1,7 +1,16 @@
 # Ortho Flashcards
 
-A personal flashcard app for the OITE questions I've missed. (Work in progress: the
-import step is done; the study app comes next. See `FLASHCARD_APP_PLAN.md`.)
+A personal flashcard app for the OITE questions I've missed. (Work in progress: import and the
+basic study loop are done; spaced repetition and saved progress come next. See `FLASHCARD_APP_PLAN.md`.)
+
+## Running the app locally
+
+```bash
+python3 -m http.server 8123
+```
+
+Then open http://localhost:8123. (Opening `index.html` directly won't work: the browser blocks
+loading `cards.json` from a `file://` page.)
 
 ## Adding cards (no code changes needed)
 

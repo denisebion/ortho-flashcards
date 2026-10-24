@@ -19,6 +19,18 @@ each phase.
 - `cards.json`: generated; the app loads it. Don't hand-edit.
 - Study progress lives in the browser (localStorage), keyed by card id; the import never touches it.
 
+## App files
+- `index.html`: three views (home, study, done), toggled by `hidden`.
+- `css/style.css`: mobile-first styles; topic color comes in as `--accent` per chip/card.
+- `js/app.js`: state + screens (home chips, study, end summary) + keyboard (Space/Enter flip, 1-4 rate).
+- `js/session.js`: queue logic only (no DOM): shuffle or most-missed-first order, "Again" re-queues
+  after 4 cards, summary. `onRate(card, grade)` is the hook Phase 4 uses for scheduling.
+- `js/render.js`: DOM helper `h()` (text only, never innerHTML) and cloze front/back rendering.
+- `js/data.js`: loads `topics.json` + `cards.json`.
+- Run locally: `python3 -m http.server 8123` then open http://localhost:8123 (`.claude/launch.json` has this).
+- Status: Phase 3 done (no scheduling or saved progress yet: every card counts as "to study", and
+  Hard/Good/Easy all just finish the card for this session).
+
 ## CSV format (no header, 3 columns)
 1. card text with Anki clozes: `{{c1::answer}}` / `{{c1::answer::hint}}`, multiple allowed
 2. `💡 tip<br><small>Logged 9/6, 9/21</small>`: dates have no year (most recent non-future year is used); number of dates = times missed

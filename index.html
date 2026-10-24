@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f6f4ef">
+  <title>Ortho Flashcards</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Home: pick topics, start -->
+  <main id="home" class="view" hidden>
+    <header class="home-head">
+      <h1>Ortho Flashcards</h1>
+      <p class="muted" id="total"></p>
+    </header>
+    <h2 class="section-label">Topics</h2>
+    <div id="chips" class="chips"></div>
+    <div class="home-foot">
+      <p id="due" class="due"></p>
+      <label class="toggle"><input type="checkbox" id="shuffle" checked> Shuffle</label>
+      <button id="start" class="primary" type="button">Start</button>
+    </div>
+  </main>
+
+  <!-- Study: one card at a time -->
+  <main id="study" class="view study" hidden>
+    <header class="study-head">
+      <button id="exit" class="icon-btn" type="button" aria-label="End session">✕</button>
+      <span id="progress-text" class="progress-text"></span>
+    </header>
+    <div class="progress"><div id="progress-bar"></div></div>
+    <div id="card-area" class="card-area"></div>
+    <div id="actions" class="actions"></div>
+  </main>
+
+  <!-- End of session -->
+  <main id="done" class="view" hidden>
+    <h1>Session complete</h1>
+    <div id="done-stats" class="stats"></div>
+    <section id="again-section">
+      <h2 class="section-label">Hit "Again" on</h2>
+      <ul id="again-list" class="again-list"></ul>
+      <button id="study-again" class="secondary" type="button">Study these again</button>
+    </section>
+    <button id="home-btn" class="primary" type="button">Back to home</button>
+  </main>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
