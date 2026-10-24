@@ -59,15 +59,26 @@ kbd { font: inherit; font-size: 0.7rem; opacity: 0.7; margin-left: 8px; padding:
 
 .home-foot {
   position: sticky; bottom: 0;
-  display: grid; grid-template-columns: 1fr auto; gap: 8px 16px; align-items: center;
+  display: grid; gap: 10px;
   margin: 32px calc(-1 * var(--pad)) calc(-1 * var(--pad));
-  padding: 12px var(--pad) calc(12px + env(safe-area-inset-bottom));
-  background: linear-gradient(to top, var(--bg) 80%, transparent);
+  padding: 14px var(--pad) calc(12px + env(safe-area-inset-bottom));
+  background: linear-gradient(to top, var(--bg) 85%, transparent);
 }
-.due { margin: 0; font-weight: 600; }
-.toggle { color: var(--muted); display: flex; align-items: center; gap: 6px; }
-.toggle input { width: 20px; height: 20px; }
-.home-foot .primary { grid-column: 1 / -1; }
+.due { margin: 0; font-weight: 700; font-size: 1.1rem; }
+.small { font-size: 0.85rem; margin: 0; }
+
+.options { display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: center; }
+.toggle { color: var(--ink); display: flex; align-items: center; gap: 8px; min-height: 44px; }
+.toggle input[type="checkbox"] { width: 20px; height: 20px; }
+select { font: inherit; padding: 8px 10px; border-radius: 10px; border: 2px solid var(--line); background: var(--card); color: var(--ink); min-height: 44px; }
+
+.tools { margin-top: 24px; border-top: 1px solid var(--line); padding-top: 12px; }
+.tools summary { cursor: pointer; font-weight: 600; color: var(--muted); min-height: 32px; }
+.tool-buttons { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.tool-buttons .secondary { min-height: 46px; font-size: 0.95rem; padding: 6px 14px; }
+.secondary.danger { color: var(--again); border-color: var(--again); }
+
+.warning { margin: 0; padding: 10px var(--pad); background: #fbe9e7; color: var(--again); font-size: 0.9rem; text-align: center; }
 
 .primary, .secondary {
   min-height: 54px; padding: 10px 20px; border-radius: 14px; font-weight: 600; font-size: 1.05rem;
@@ -131,7 +142,9 @@ kbd { font: inherit; font-size: 0.7rem; opacity: 0.7; margin-left: 8px; padding:
   min-height: 64px; border: 0; border-radius: 14px; color: #fff; font-weight: 700; font-size: 1.02rem;
   display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
 }
+.rate { flex-direction: column; gap: 2px; padding: 6px 4px; }
 .rate kbd { margin-left: 6px; }
+.rate .next { font-size: 0.75rem; font-weight: 500; opacity: 0.85; } /* when it will come back */
 .rate.again { background: var(--again); }
 .rate.hard { background: var(--hard); }
 .rate.good { background: var(--good); }

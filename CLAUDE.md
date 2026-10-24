@@ -23,13 +23,20 @@ each phase.
 - `index.html`: three views (home, study, done), toggled by `hidden`.
 - `css/style.css`: mobile-first styles; topic color comes in as `--accent` per chip/card.
 - `js/app.js`: state + screens (home chips, study, end summary) + keyboard (Space/Enter flip, 1-4 rate).
-- `js/session.js`: queue logic only (no DOM): shuffle or most-missed-first order, "Again" re-queues
-  after 4 cards, summary. `onRate(card, grade)` is the hook Phase 4 uses for scheduling.
+- `js/session.js`: no DOM. `planSession` picks the queue: due reviews first, then new cards
+  (those missed 2+ times on quizzes lead; capped by "new cards per session", default 20, 0 = all).
+  `Session` runs the queue: "Again" re-queues after 4 cards; `onRate(card, grade)` hook; summary.
+- `js/srs.js`: pure simplified SM-2 (rules in the file header). Day-granularity; "Again" = due today.
+- `js/store.js`: `ProgressStore` over localStorage key `ortho-flashcards-progress-v1`
+  (`{version, cards:{id:record}, settings}`), JSON export/import. Import merges: newest `last` wins per card.
 - `js/render.js`: DOM helper `h()` (text only, never innerHTML) and cloze front/back rendering.
 - `js/data.js`: loads `topics.json` + `cards.json`.
 - Run locally: `python3 -m http.server 8123` then open http://localhost:8123 (`.claude/launch.json` has this).
-- Status: Phase 3 done (no scheduling or saved progress yet: every card counts as "to study", and
-  Hard/Good/Easy all just finish the card for this session).
+- Progress record per card: `{due, last, ease, interval, streak, again, reps}`. Every rating is saved immediately.
+  Settings saved with it: selected topics, shuffle, new-cards limit.
+- Status: Phases 1-4 done. Next: Phase 5 (polish, PWA/offline), Phase 6 (deploy).
+- Browser storage is per origin and per install: the iPhone home-screen app and Safari tabs do NOT share
+  progress, so use Export/Import to move between them.
 
 ## CSV format (no header, 3 columns)
 1. card text with Anki clozes: `{{c1::answer}}` / `{{c1::answer::hint}}`, multiple allowed

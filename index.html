@@ -8,6 +8,8 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+  <p id="storage-warning" class="warning" role="alert" hidden></p>
+
   <!-- Home: pick topics, start -->
   <main id="home" class="view" hidden>
     <header class="home-head">
@@ -16,9 +18,37 @@
     </header>
     <h2 class="section-label">Topics</h2>
     <div id="chips" class="chips"></div>
-    <div class="home-foot">
-      <p id="due" class="due"></p>
+
+    <h2 class="section-label">Options</h2>
+    <div class="options">
       <label class="toggle"><input type="checkbox" id="shuffle" checked> Shuffle</label>
+      <label class="toggle">New cards per session
+        <select id="new-limit">
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="50">50</option>
+          <option value="0">All</option>
+        </select>
+      </label>
+    </div>
+
+    <details class="tools">
+      <summary>Backup &amp; reset</summary>
+      <p class="muted">Progress is saved in this browser only. Export a file to back it up or move it to another device; importing merges (the most recent review of each card wins).</p>
+      <div class="tool-buttons">
+        <button id="export" class="secondary" type="button">Export progress</button>
+        <button id="import" class="secondary" type="button">Import progress</button>
+        <button id="reset" class="secondary danger" type="button">Reset progress</button>
+      </div>
+      <input id="import-file" type="file" accept="application/json,.json" hidden>
+      <p id="tools-msg" class="muted" role="status"></p>
+    </details>
+
+    <div class="home-foot">
+      <div>
+        <p id="due" class="due"></p>
+        <p id="due-detail" class="muted small"></p>
+      </div>
       <button id="start" class="primary" type="button">Start</button>
     </div>
   </main>

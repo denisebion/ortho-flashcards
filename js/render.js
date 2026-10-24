@@ -31,7 +31,7 @@ export function cardText(card, side) {
 }
 
 // "2026-09-06" -> "Sep 6" (parsed by hand so time zones can't shift the day)
-function shortDate(iso) {
+export function shortDate(iso) {
   const [y, m, d] = iso.split('-').map(Number);
   return new Date(y, m - 1, d).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
 }

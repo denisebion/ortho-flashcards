@@ -1,7 +1,7 @@
 # Ortho Flashcards
 
 A personal flashcard app for the OITE questions I've missed. (Work in progress: import and the
-basic study loop are done; spaced repetition and saved progress come next. See `FLASHCARD_APP_PLAN.md`.)
+study loop, spaced repetition and saved progress are done; polish, offline and deploy come next. See `FLASHCARD_APP_PLAN.md`.)
 
 ## Running the app locally
 
@@ -11,6 +11,17 @@ python3 -m http.server 8123
 
 Then open http://localhost:8123. (Opening `index.html` directly won't work: the browser blocks
 loading `cards.json` from a `file://` page.)
+
+## Studying and progress
+
+- Each session = cards **due** today + up to N **new** cards (choose 10 / 20 / 50 / All on the home
+  screen). New cards you missed more than once on quizzes come first.
+- Rate each card Again / Hard / Good / Easy (keys 1–4). The button shows when the card will come back.
+  Again brings it back later in the same session.
+- Progress is saved in the browser after every rating. Use **Backup & reset** on the home screen to
+  export a file, import one (merging; the most recent review of each card wins), or reset.
+- Browser storage is per browser: Safari and the iPhone home-screen app keep **separate** progress,
+  so export/import to move between them (or between devices).
 
 ## Adding cards (no code changes needed)
 
