@@ -1,0 +1,22 @@
+Import summary
+==============
+File: ortho-progress log.csv (246 rows)
+
+Rows read:          246
+Cards in cards.json: 246
+New cards added:    0
+Duplicates merged:  0
+Rows skipped:       0
+
+Cards per topic:
+  Hand, Foot & Ankle   42
+  Shoulder & Elbow     31
+  Knee & Sports        39
+  Spine                31
+  Basic Science        6
+  Pathology            29
+  Pediatrics           26
+  Trauma               21
+  Recon                21
+
+Unsorted tags: none

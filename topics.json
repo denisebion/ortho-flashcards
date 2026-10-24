@@ -1,0 +1,27 @@
+{
+  "_comment": "Maps CSV tags to the topics shown in the app. To rename a topic, edit its label. To add a tag, append it to a topic's tags. To split a topic (e.g. Hand/Wrist vs Foot/Ankle), give each tag its own topic entry. Then re-run: python3 tools/import_cards.py",
+  "topics": [
+    { "id": "HFA",    "label": "Hand, Foot & Ankle", "color": "#E4572E", "tags": ["OITE::Hand_Wrist", "OITE::Foot_Ankle"] },
+    { "id": "SE",     "label": "Shoulder & Elbow",   "color": "#2E86AB", "tags": ["OITE::Shoulder_Elbow"] },
+    { "id": "KS",     "label": "Knee & Sports",      "color": "#F2A541", "tags": ["OITE::Sports"] },
+    { "id": "SPINE",  "label": "Spine",              "color": "#7B5EA7", "tags": ["OITE::Spine"] },
+    { "id": "BS",     "label": "Basic Science",      "color": "#5C7A89", "tags": ["OITE::Basic_Science"] },
+    { "id": "PATH",   "label": "Pathology",          "color": "#C2185B", "tags": ["OITE::Oncology"] },
+    { "id": "PEDS",   "label": "Pediatrics",         "color": "#3FA34D", "tags": ["OITE::Peds"] },
+    { "id": "TRAUMA", "label": "Trauma",             "color": "#8C5A3C", "tags": ["OITE::Trauma"] },
+    { "id": "RECON",  "label": "Recon",              "color": "#17A2B8", "tags": ["OITE::Recon"] }
+  ],
+  "unsorted": { "id": "UNSORTED", "label": "Unsorted", "color": "#888888" },
+  "subtopicLabels": {
+    "OITE::Hand_Wrist": "Hand/Wrist",
+    "OITE::Foot_Ankle": "Foot/Ankle",
+    "OITE::Shoulder_Elbow": "Shoulder/Elbow",
+    "OITE::Sports": "Sports",
+    "OITE::Spine": "Spine",
+    "OITE::Basic_Science": "Basic Science",
+    "OITE::Oncology": "Oncology",
+    "OITE::Peds": "Peds",
+    "OITE::Trauma": "Trauma",
+    "OITE::Recon": "Recon"
+  }
+}
