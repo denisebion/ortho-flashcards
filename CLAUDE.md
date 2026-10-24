@@ -34,7 +34,15 @@ each phase.
 - Run locally: `python3 -m http.server 8123` then open http://localhost:8123 (`.claude/launch.json` has this).
 - Progress record per card: `{due, last, ease, interval, streak, again, reps}`. Every rating is saved immediately.
   Settings saved with it: selected topics, shuffle, new-cards limit.
-- Status: Phases 1-4 done. Next: Phase 5 (polish, PWA/offline), Phase 6 (deploy).
+- `sw.js`: service worker, network-first with cache fallback (4s timeout), so online always gets the
+  latest files and offline uses the last copy; no version number to bump. `PRECACHE` lists the app
+  shell: **add new app files (js/css/icons) to that list**. Cache name `ortho-flashcards-v1`.
+- `manifest.webmanifest` + `icons/` (made by `python3 tools/make_icons.py`): installable PWA. All paths in
+  the app are relative so it also works from a GitHub Pages subpath (user.github.io/repo/).
+- Keyboard: Space/Enter flip, 1-4 rate, Esc exit session, Enter on home = Start / on end screen = home.
+- Status: Phases 1-5 done. Next: Phase 6 (deploy to GitHub Pages + README).
+- Testing a service worker in the preview browser: unregister it and delete caches afterwards
+  (`navigator.serviceWorker.getRegistrations()`, `caches.keys()`) so it doesn't confuse later checks.
 - Browser storage is per origin and per install: the iPhone home-screen app and Safari tabs do NOT share
   progress, so use Export/Import to move between them.
 

@@ -1,7 +1,7 @@
 # Ortho Flashcards
 
 A personal flashcard app for the OITE questions I've missed. (Work in progress: import and the
-study loop, spaced repetition and saved progress are done; polish, offline and deploy come next. See `FLASHCARD_APP_PLAN.md`.)
+study loop, spaced repetition, saved progress, and offline support are done; deployment comes next. See `FLASHCARD_APP_PLAN.md`.)
 
 ## Running the app locally
 
@@ -22,6 +22,13 @@ loading `cards.json` from a `file://` page.)
   export a file, import one (merging; the most recent review of each card wins), or reset.
 - Browser storage is per browser: Safari and the iPhone home-screen app keep **separate** progress,
   so export/import to move between them (or between devices).
+
+## Install on iPhone / work offline
+
+Once the app is hosted (see deploy notes, coming in Phase 6), open it in **Safari**, tap
+**Share → Add to Home Screen**. It then opens full screen and works offline: the first visit saves
+the app and all cards on the phone, and later visits use the latest files when online.
+Study progress lives on the phone; export a backup now and then.
 
 ## Adding cards (no code changes needed)
 

@@ -91,7 +91,9 @@ export class Session {
   summary() {
     const grades = [...this.firstGrade.values()];
     const goodEasy = grades.filter((g) => g === 'good' || g === 'easy').length;
+    const counts = Object.fromEntries(GRADES.map((g) => [g, grades.filter((x) => x === g).length]));
     return {
+      counts, // first-try ratings: { again, hard, good, easy }
       reviewed: grades.length,
       goodEasyPct: grades.length ? Math.round((100 * goodEasy) / grades.length) : 0,
       againCards: this.cards.filter((c) => this.againIds.has(c.id)),

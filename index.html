@@ -4,6 +4,15 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#f6f4ef">
+  <meta name="description" content="Study the OITE questions I've missed, with spaced repetition.">
+  <!-- installable web app (PWA); iOS: Share > Add to Home Screen -->
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Ortho Cards">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Ortho Flashcards</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
@@ -56,7 +65,8 @@
   <!-- Study: one card at a time -->
   <main id="study" class="view study" hidden>
     <header class="study-head">
-      <button id="exit" class="icon-btn" type="button" aria-label="End session">✕</button>
+      <button id="exit" class="icon-btn" type="button" aria-label="End session (progress is saved)">✕</button>
+      <span class="keys-hint">Space flip · 1–4 rate · Esc exit</span>
       <span id="progress-text" class="progress-text"></span>
     </header>
     <div class="progress"><div id="progress-bar"></div></div>
@@ -68,6 +78,8 @@
   <main id="done" class="view" hidden>
     <h1>Session complete</h1>
     <div id="done-stats" class="stats"></div>
+    <p id="done-breakdown" class="breakdown" aria-label="First-try ratings"></p>
+    <p id="done-next" class="muted"></p>
     <section id="again-section">
       <h2 class="section-label">Hit "Again" on</h2>
       <ul id="again-list" class="again-list"></ul>

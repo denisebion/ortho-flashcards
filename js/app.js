@@ -5,7 +5,7 @@
 import { loadData } from './data.js';
 import { Session, GRADES, planSession } from './session.js';
 import { ProgressStore } from './store.js';
-import { schedule, nextInterval, formatInterval, todayStr } from './srs.js';
+import { schedule, nextInterval, formatInterval, todayStr, addDays } from './srs.js';
 import { h, tint, cardText, loggedLine, shortDate } from './render.js';
 
 const GRADE_LABELS = { again: 'Again', hard: 'Hard', good: 'Good', easy: 'Easy' };
@@ -168,14 +168,24 @@ function rate(grade) {
 // ------------------------------------------------------------------ end of session
 
 function renderDone() {
-  const { reviewed, goodEasyPct, againCards } = state.session.summary();
+  const { reviewed, goodEasyPct, counts, againCards } = state.session.summary();
   $('done-stats').replaceChildren(
     h('div', { class: 'stat' }, h('strong', null, String(reviewed)), 'cards reviewed'),
     h('div', { class: 'stat' }, h('strong', null, `${goodEasyPct}%`), 'Good or Easy first try'),
   );
+  $('done-breakdown').replaceChildren(...GRADES.map((g) =>
+    h('span', { class: `pill ${g}` }, `${GRADE_LABELS[g]} ${counts[g]}`)));
+
+  // what's waiting tomorrow: reviews due by then (anything left over from today counts too)
+  const tomorrow = addDays(todayStr(), 1);
+  const soon = selectedCards().filter((c) => { const r = store.record(c.id); return r && r.due <= tomorrow; }).length;
+  $('done-next').textContent = soon
+    ? `${soon} card${soon === 1 ? '' : 's'} will be due by tomorrow.`
+    : 'Nothing due tomorrow.';
 
   const list = $('again-list');
-  list.replaceChildren(...againCards.map((c) => h('li', null, plainText(c))));
+  list.replaceChildren(...againCards.map((c) => h('li', { style: `--accent:${topicOf(c).color}` },
+    h('span', { class: 'dot', title: topicOf(c).label }), plainText(c))));
   $('again-section').hidden = againCards.length === 0;
   $('study-again').onclick = () => startSession(againCards);
   show('done');
@@ -220,14 +230,29 @@ function resetProgress() {
 
 // ------------------------------------------------------------------ wiring
 
+// Keyboard (laptop):
+//   study:  Space/Enter flip, 1-4 rate, Esc back to home (progress is already saved)
+//   home / end screen:  Enter = Start / Back to home (unless a control has focus)
 function onKey(e) {
-  if (views.study.hidden || e.metaKey || e.ctrlKey || e.altKey) return;
-  if (e.key === ' ' || e.key === 'Enter') {
-    e.preventDefault(); // also stops a focused button from being "clicked" by the key
-    flip();
-  } else if (e.key >= '1' && e.key <= '4') {
-    rate(GRADES[Number(e.key) - 1]);
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  if (!views.study.hidden) {
+    if (e.key === ' ' || e.key === 'Enter') {
+      e.preventDefault(); // also stops a focused button from being "clicked" by the key
+      flip();
+    } else if (e.key >= '1' && e.key <= '4') {
+      rate(GRADES[Number(e.key) - 1]);
+    } else if (e.key === 'Escape') {
+      goHome();
+    }
+  } else if (e.key === 'Enter' && !(e.target instanceof Element && e.target.closest('button, select, summary, input, a'))) {
+    if (!views.home.hidden && !$('start').disabled) $('start').click();
+    else if (!views.done.hidden) goHome();
   }
+}
+
+function goHome() {
+  show('home');
+  renderHome();
 }
 
 async function init() {
@@ -245,8 +270,8 @@ async function init() {
   $('shuffle').addEventListener('change', (e) => { state.shuffle = e.target.checked; saveSettings(); });
   $('new-limit').addEventListener('change', (e) => { state.newLimit = Number(e.target.value); saveSettings(); renderHome(); });
   $('start').addEventListener('click', () => startSession(currentPlan(state.shuffle).queue));
-  $('exit').addEventListener('click', () => { show('home'); renderHome(); });
-  $('home-btn').addEventListener('click', () => { show('home'); renderHome(); });
+  $('exit').addEventListener('click', goHome);
+  $('home-btn').addEventListener('click', goHome);
   $('export').addEventListener('click', exportProgress);
   $('import').addEventListener('click', () => $('import-file').click());
   $('import-file').addEventListener('change', (e) => {
@@ -261,3 +286,9 @@ async function init() {
 }
 
 init();
+
+// Offline support + ask the browser not to evict saved progress when storage runs low.
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+}
+if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
